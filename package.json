@@ -1,0 +1,18 @@
+{
+  "name": "kyo-assistant",
+  "version": "1.0.0",
+  "description": "kyo's discord assistant",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kyo",
+  "license": "MIT",
+  "dependencies": {
+    "common-tags": "^1.8.0",
+    "discord-akairo": "github:SkyBlockDev/discord-akairo",
+    "discord.js": "^13.2.0",
+    "mongoose": "^6.0.12",
+    "util": "^0.12.4"
+  }
+}

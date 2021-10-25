@@ -12,7 +12,11 @@ class MessageListener extends Listener {
         if(message.author.bot) return;
 
         let guild_db = await this.client.guildSettings.get(message.guild);
-        let prefix = guild_db.prefix;
+
+        if(message.content === '<@!896397049854046269>') message.reply({ embeds: [
+            this.client.functions.embed('kyo\'s assistant')
+                .setDescription(`\`\`\`Salut ${message.author.tag} :)\n\nMon préfix est ${guild_db.prefix}\nSi tu souhaites avoir la liste des commandes, je te conseille de faire ${guild_db.prefix}help\`\`\``)
+        ] });
 
         let ban_words = guild_db.ban_words;
         let content = message.content.split(' ');

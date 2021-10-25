@@ -23,7 +23,7 @@ class BotInfoCommand extends Command {
                     .addFields(
                         { name: `Version:`, value: '`1.0.0`', inline: true },
                         { name: 'Serveurs:', value: `\`${this.client.guilds.cache.size}\``, inline: true },
-                        { name: 'Utilisateurs:', value: `\`Calcul...\``, inline: true },
+                        { name: 'Utilisateurs:', value: `\`${this.client.users.cache.size}\``, inline: true },
                         { name: 'Mémoire:', value: `\`16gb\``, inline: true },
                         { name: 'Développeur:', value: `\`>_ky0O'#5948\``, inline: true },
                         { name: 'Date de Création:', value: `\`10/10/2021\``, inline: true },

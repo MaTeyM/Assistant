@@ -31,7 +31,7 @@ class banwordsCommand extends Command {
       message.reply({ embeds: [embed] });
     } else {
         if(config == 'add' && word) {
-            if(ban_words.includes(word)) return message.reply('```/!\\ Le mot est déja dans la liste! /!\\```');
+            if(ban_words.includes(word)) return message.reply('*```/!\\ Le mot est déja dans la liste! /!\\```*');
             ban_words.push(word);
             await this.client.guildSettings.update(message.guild, { ban_words: ban_words });
             let embed = this.client.functions.embed('Modération - Sécurité du serveur')
@@ -39,7 +39,7 @@ class banwordsCommand extends Command {
 
             return message.reply({ embeds: [embed] });
         } else if(config == 'remove' && word) {
-            if(!ban_words.includes(word)) return message.reply('```/!\\ Le mot n\'est pas dans la liste! /!\\```');
+            if(!ban_words.includes(word)) return message.reply('*```/!\\ Le mot n\'est pas dans la liste! /!\\```*');
             const mot = (m) => m = word;
             let pos = ban_words.find(mot);
             ban_words.splice(pos,1);

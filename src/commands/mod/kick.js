@@ -37,7 +37,7 @@ class kickCommand extends Command {
       if (m.content === "cancel")
         return (
           m.delete() &&
-          message.channel.send(`\`\`\`/!\\ Commande annulée /!\\\`\`\``)
+          message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
         );
       m.delete();
       member =
@@ -49,7 +49,7 @@ class kickCommand extends Command {
         message.mentions.members.first();
       if (!member)
         return message.channel.send(
-          "```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```"
+          "*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*"
         );
 
       let embed = this.client.functions
@@ -72,7 +72,7 @@ class kickCommand extends Command {
         if (m.content === "cancel")
           return (
             m.delete() &&
-            message.channel.send(`\`\`\`/!\\ Commande annulée /!\\\`\`\``)
+            message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
           );
         m.delete();
         reason = m.content;

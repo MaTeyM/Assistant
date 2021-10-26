@@ -1,5 +1,5 @@
 const { TOKEN, MONGOSTRING } = require('../util/config');
-const { GuildProvider }  = require('./PROVIDERS');
+const { GuildProvider, MemberProvider }  = require('./PROVIDERS');
 const { embed } = require('../util/functions');
 const { AkairoClient, CommandHandler, ListenerHandler } = require('discord-akairo');
 const mongoose = require('mongoose');
@@ -30,7 +30,7 @@ module.exports = class KyoClient extends AkairoClient {
         this.commandHandler = new CommandHandler(this, {
             allowMention: true,
             prefix: async message => {
-                const _ = await this.guildSettings.get(message.guild);
+                const _ = await this.guildDB.get(message.guild);
                 if (_) return _.prefix
                 return config.prefix
             },
@@ -42,7 +42,8 @@ module.exports = class KyoClient extends AkairoClient {
         });
 
         this.functions = { embed: embed };
-        this.guildSettings = new GuildProvider();
+        this.guildDB = new GuildProvider();
+        this.memberDB = new MemberProvider();
     };
 
     async init() {

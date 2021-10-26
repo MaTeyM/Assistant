@@ -11,7 +11,7 @@ class MessageListener extends Listener {
     async exec(message) {
         if(message.author.bot) return;
 
-        let guild_db = await this.client.guildSettings.get(message.guild);
+        let guild_db = await this.client.guildDB.get(message.guild);
 
         if(message.content === '<@!896397049854046269>') message.reply({ embeds: [
             this.client.functions.embed('kyo\'s assistant')

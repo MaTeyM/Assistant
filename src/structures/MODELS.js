@@ -40,6 +40,28 @@ const guildSchema = Schema({
     }
 });
 
+const memberSchema = Schema({
+    id: String,
+    guildID: String,
+    xp: {
+        type: Number,
+        default: 0
+    },
+    cash: {
+        type: Number,
+        default: 500
+    },
+    afk: {
+        type: Boolean,
+        default: false
+    },
+    afk_reason: {
+        type: String,
+        default: null
+    }
+});
+
 module.exports = {
-    Guild: model('Guild', guildSchema)
+    Guild: model('Guild', guildSchema),
+    Member: model('Member', memberSchema)
 };

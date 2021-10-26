@@ -32,7 +32,7 @@ class PrefixCommand extends Command {
         ],
       });
     }
-    await this.client.guildSettings.update(message.guild, { prefix: prefix });
+    await this.client.guildDB.update(message.guild, { prefix: prefix });
     message.reply({
       embeds: [
         this.client.functions

@@ -54,8 +54,8 @@ class HelpCommand extends Command {
           },
           {
             name: "Examples:",
-            value: `\`${this.handler.prefix}${command.description.examples.join(
-              `\` | ${this.handler.prefix}\``
+            value: `\`${await this.handler.prefix(message)}${command.description.examples.join(
+              `\` | ${await this.handler.prefix(message)}\``
             )}\``,
             inline: true,
           }

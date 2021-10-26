@@ -9,7 +9,7 @@ class commandFinishedListener extends Listener {
     }
 
     async exec(message, command, args) {
-        let db = await this.client.guildSettings.get(message.guild)
+        let db = await this.client.guildDB.get(message.guild)
         let delete_command = db.delete_command;
         if(delete_command) message.delete();
     };

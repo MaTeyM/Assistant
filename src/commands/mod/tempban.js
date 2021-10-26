@@ -1,17 +1,17 @@
 const { Command } = require("discord-akairo");
 
-class kickCommand extends Command {
+class tempbanCommand extends Command {
   constructor() {
-    super("kick", {
-      aliases: ["kick"],
+    super("tempban", {
+      aliases: ["tempban", 'tban'],
       description: {
-        content: "Exclure un membre du serveur!",
-        usage: "kick",
-        examples: ["kick"],
+        content: "Bannir un membre du serveur pendant un temps voulu!",
+        usage: "tempban",
+        examples: ["tempban"],
       },
       category: "Modération - Sécurité du serveur",
-      userPermissions: ["KICK_MEMBERS"],
-      clientPermissions: ["KICK_MEMBERS"],
+      userPermissions: ["BAN_MEMBERS"],
+      clientPermissions: ["BAN_MEMBERS"],
     });
   }
 
@@ -19,13 +19,14 @@ class kickCommand extends Command {
     let member;
     let reason;
     let logs_channel;
+    let duration;
 
     let db = await this.client.guildDB.get(message.guild);
 
     let embed = this.client.functions
       .embed("Modération - Sécurité du serveur")
       .setAuthor(message.author.tag, message.author.displayAvatarURL())
-      .setDescription("```Quel membre voulez-vous exclure?```");
+      .setDescription("```Quel membre voulez-vous bannir?```");
 
     message.reply({ embeds: [embed] });
 
@@ -59,7 +60,7 @@ class kickCommand extends Command {
         .embed("Modération - Sécurité du serveur")
         .setAuthor(member.user.tag, member.user.displayAvatarURL())
         .setDescription(
-          "Pour quelle raison voulez-vous éxclure cet utilisateur?"
+          "Pendant combien de jours voulez-vous bannir cet utilisateur?"
         );
 
       message.channel.send({ embeds: [embed] });
@@ -73,6 +74,32 @@ class kickCommand extends Command {
 
       collector.on("collect", (m) => {
         if (m.content === "cancel")
+        return (
+          m.delete() &&
+          message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
+        );
+      m.delete();
+      duration = m.content
+      if(!isNaN(duration)) return message.channel.send(`*\`\`\`/!\\ Le nombre n'est pas valide | Commande annulée /!\\\`\`\`*`);
+
+      let embed = this.client.functions
+      .embed("Modération - Sécurité du serveur")
+      .setAuthor(member.user.tag, member.user.displayAvatarURL())
+      .setDescription(
+        "Pour quelle raison voulez-vous bannir cet utilisateur?"
+      );
+
+    message.channel.send({ embeds: [embed] });
+
+    let filter = (m) => m.author.id === message.author.id;
+    let collector = message.channel.createMessageCollector({
+      filter,
+      time: 60000,
+      max: 1,
+    });
+
+    collector.on('collect', m => {
+        if (m.content === "cancel")
           return (
             m.delete() &&
             message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
@@ -80,32 +107,32 @@ class kickCommand extends Command {
         m.delete();
         reason = m.content;
 
-        member.kick(reason);
+        member.ban({ reason: reason, days: duration });
 
         let embed = this.client.functions
           .embed("Modération - Sécurité du serveur")
           .setDescription(
-            `\`\`\`L'utilisateur ${member.user.tag} a été éxclu pour la raison suivante: ${reason}\`\`\``
+            `\`\`\`L'utilisateur ${member.user.tag} a été banni pour la raison suivante: ${reason} pendant ${duration} jours\`\`\``
           );
 
-          let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
-          .setDescription('`Un utilisateur a été éxclu!`')
-          .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
-          .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
-          .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
+        let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
+            .setDescription(`\`Un utilisateur a été banni pendant ${duration} jours!\``)
+            .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
+            .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
+            .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
 
-      if(db.logs_channel) {
-          logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
-      } else {
-          logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
-      }
+        if(db.logs_channel) {
+            logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
+        } else {
+            logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
+        }
 
-      if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
-
+        if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
         return message.channel.send({ embeds: [embed] });
+    });
       });
     });
-  }
-}
+  };
+};
 
-module.exports = kickCommand;
+module.exports = tempbanCommand;

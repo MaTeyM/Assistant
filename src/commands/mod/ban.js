@@ -89,7 +89,7 @@ class banCommand extends Command {
           );
 
         let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
-            .setDescription('`Un utilisateur a été banni!`')
+            .setDescription('🔨 `Un utilisateur a été banni!`')
             .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
             .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
             .addField('Raison:', `\`\`\`${reason}\`\`\``, true)

@@ -1,4 +1,5 @@
 const { Listener } = require('discord-akairo');
+const { Member } = require('../../structures/MODELS');
 
 class MessageListener extends Listener {
     constructor() {
@@ -11,7 +12,10 @@ class MessageListener extends Listener {
     async exec(message) {
         if(message.author.bot) return;
 
+        let memberData = await this.client.memberDB.get(message.member, message.guild);
         let guild_db = await this.client.guildDB.get(message.guild);
+
+        if(!memberData) return Member.create({ id: message.author.id, guildID: message.guild.id });
 
         if(message.content === '<@!896397049854046269>') message.reply({ embeds: [
             this.client.functions.embed('kyo\'s assistant')
@@ -27,13 +31,13 @@ class MessageListener extends Listener {
                 if(ban_words.includes(word)) {
                     message.delete()
                     message.channel.send({ embeds: [
-                        this.client.functions.embed('Modération Automatique')
+                        this.client.functions.embed('Modération Automatique - Sécurité du serveur')
                             .setAuthor(message.author.tag, message.author.displayAvatarURL())
                             .setDescription('Tu as cité un mot banni, ton message a donc été supprimé!')
                     ]});
                 };
             };
-        }
+        };
     };
 };
 

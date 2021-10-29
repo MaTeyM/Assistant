@@ -1,4 +1,4 @@
-const { Guild, User } = require('./MODELS');
+const { Guild, User, Member } = require('./MODELS');
 
 class GuildProvider {
     async get(guild) {
@@ -18,7 +18,7 @@ class GuildProvider {
 
 class MemberProvider {
     async get(member, guild) {
-        const data = await User.findOne({ id: member.id, guildID: guild.id });
+        const data = await Member.findOne({ id: member.id, guildID: guild.id });
         if(data) return data;
     };
 

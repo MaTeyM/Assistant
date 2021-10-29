@@ -89,7 +89,7 @@ class kickCommand extends Command {
           );
 
           let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
-          .setDescription('`Un utilisateur a été éxclu!`')
+          .setDescription('🔨 `Un utilisateur a été éxclu!`')
           .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
           .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
           .addField('Raison:', `\`\`\`${reason}\`\`\``, true)

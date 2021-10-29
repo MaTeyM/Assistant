@@ -116,7 +116,7 @@ class tempbanCommand extends Command {
           );
 
         let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
-            .setDescription(`\`Un utilisateur a été banni pendant ${duration} jours!\``)
+            .setDescription(`🔨 \`Un utilisateur a été banni pendant ${duration} jours!\``)
             .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
             .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
             .addField('Raison:', `\`\`\`${reason}\`\`\``, true)

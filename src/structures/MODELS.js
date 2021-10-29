@@ -58,6 +58,10 @@ const memberSchema = Schema({
     afk_reason: {
         type: String,
         default: null
+    },
+    warns: {
+        type: Array,
+        default: null
     }
 });
 

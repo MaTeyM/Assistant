@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "common-tags": "^1.8.0",
+    "date-and-time": "^2.0.1",
     "discord-akairo": "github:SkyBlockDev/discord-akairo",
     "discord.js": "^13.2.0",
     "mongoose": "^6.0.12",

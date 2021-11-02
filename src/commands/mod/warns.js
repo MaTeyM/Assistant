@@ -11,8 +11,8 @@ class warnsCommand extends Command {
         examples: ["warns"],
       },
       category: "Modération - Sécurité du serveur",
-      userPermissions: ["MANAGE_MEMBERS"],
-      clientPermissions: ["MANAGE_MEMBERS"],
+      userPermissions: ["KICK_MEMBERS"],
+      clientPermissions: ["KICK_MEMBERS"],
     });
   }
 
@@ -22,7 +22,7 @@ class warnsCommand extends Command {
     let authorTag = message.author.tag;
 
     let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-        .setDescription("***Que voulez vous faire ?***\n```\nsee: afficher les warns d'un utilisateur\nadd: avertir un utilisateur\nremove: retirer un avertissement à un utilisateur\n```\nTapez `cancel` si vous souhaitez annuler la commande!")
+        .setDescription("**Que voulez vous faire ?> **\n```\nsee -> afficher les warns d'un utilisateur\nadd -> avertir un utilisateur\nremove -> retirer un avertissement à un utilisateur\n```\nTapez `cancel` si vous souhaitez annuler la commande!")
 
     message.reply({ embeds: [embed] }).then(firstMSG => {
         let filter = m => m.author.id === message.author.id;
@@ -38,7 +38,7 @@ class warnsCommand extends Command {
             m.delete();
             if(m.content == 'see') {
                 let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                .setDescription('**De quel utilisateur voulez-vous voir les avertissements?**')
+                .setDescription('**De quel utilisateur voulez-vous voir les avertissements?**\n\nTapez `cancel` si vous souhaitez annuler la commande!')
 
                 message.reply({ embeds: [embed] }).then(secondMSG => {
                     let filter = m => m.author.id === message.author.id;
@@ -80,7 +80,9 @@ class warnsCommand extends Command {
                 });
             } else if(m.content == 'add') {
                 let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                .setDescription('***Quel membre voulez-vous avertir ?***')
+                .setDescription('**Quel membre voulez-vous avertir ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!')
+
+                let warnID = Math.round(Math.random(1, 999));
 
                 message.reply({ embeds: [embed] }).then(secondMSG => {
                     let filter = m => m.author.id === message.author.id;
@@ -104,7 +106,7 @@ class warnsCommand extends Command {
                         if (!member) return message.channel.send("*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*");
 
                         let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                        .setDescription(`***Pour quelle raison voulez vous avertir ${member.user.tag} ?***`)
+                        .setDescription(`**Pour quelle raison voulez vous avertir ${member.user.tag} ?**\n\nTapez \`cancel\` si vous souhaitez annuler la commande!`)
 
                         message.reply({ embeds: [embed] }).then(thirdMSG => {
                             let filter = m => m.author.id === message.author.id;
@@ -125,7 +127,7 @@ class warnsCommand extends Command {
                                 let time = date.format(now, 'DD/MM/YYYY HH:mm:ss')
 
                                 let newWarn = {
-                                    'id': memberData.warns = null ? '0' : memberData.warns.length,
+                                    'id': Math.round(Math.random(999) * 100),
                                     'date': time,
                                     'reason': reason
                                 };
@@ -141,7 +143,7 @@ class warnsCommand extends Command {
                                 .setDescription(`\`\`\`${member.user.tag} a été averti pour la raison: ${reason}\`\`\``)
 
                                 let logs_embed = this.client.functions.embed('Logs - Sécurité de serveur')
-                                .setDescription(`⚠ \`Un utilisateur a été averti!\``)
+                                .setDescription(`⚠ Un utilisateur a été averti!`)
                                 .addField('ID:', `\`\`\`${memberData.warns = null ? '0' : memberData.warns.length}\`\`\``, true)
                                 .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
                                 .addField('Modérateur:', `\`\`\`${authorTag}\`\`\``, true)
@@ -154,7 +156,65 @@ class warnsCommand extends Command {
                         });
                     });
                 });
-            };
+            } else if(m.content == 'remove') {
+              let embed = this.client.functions.embed('Modération - Sécurité du serveur')
+              .setDescription('**De quel utilisateur voulez-vous retirer un warn ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!')
+
+              message.reply({ embeds: [embed] }).then(secondMSG => {
+                  let filter = m => m.author.id === message.author.id;
+                  let collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
+
+                  collector.on('collect', m => {
+                      secondMSG.delete();
+                      if (m.content === "cancel")
+                      return (
+                        m.delete() &&
+                        message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
+                      );
+                      m.delete();
+                      member =
+                      message.guild.members.cache.get(m.content) ||
+                      message.guild.members.cache.find((u) => u.user.id == m.content) ||
+                      message.guild.members.cache.find((u) => u.user.name == m.content) ||
+                      message.guild.members.cache.find((u) => u.username == m.content) ||
+                      message.guild.members.cache.find((u) => u.user.tag == m.content) ||
+                      message.mentions.members.first();
+                      if (!member) return message.channel.send("*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*");
+
+                      let embed = this.client.functions.embed('Modération - Sécurité du serveur')
+                      .setDescription(`**Quel warn voulez-vous retirer a ${member.user.tag} ?** (Veuillez entrer son ID)\n\nTapez \`cancel\` si vous souhaitez annuler la commande!`)
+
+                      message.reply({ embeds: [embed] }).then(thirdMSG => {
+                          let filter = m => m.author.id === message.author.id;
+                          let collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
+
+                          collector.on('collect', async m => {
+                              thirdMSG.delete();
+                              if (m.content === "cancel")
+                              return (
+                                m.delete() &&
+                                message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
+                              );
+                              m.delete();
+                              let warnID = m.content;
+                              let memberData = await this.client.memberDB.get(member, message.guild);
+                              
+                              let db = await this.client.memberDB.get(member, message.guild);
+                              let warns = db.warns;
+
+                            warns.splice(warnID,1);
+                            let newWarns = warns;
+                            await this.client.memberDB.update(member, message.guild, { warns: newWarns });
+
+                              let embed = this.client.functions.embed('Modération - Sécurité du serveur')
+                              .setDescription(`\`\`\`Le warn ${warnID} de ${member.user.tag} a été supprimé!\`\`\``)
+
+                              return message.reply({ embeds: [embed] });
+                          });
+                      });
+                  });
+              });
+          };
         });
     });
   };

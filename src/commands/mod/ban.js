@@ -12,20 +12,40 @@ class banCommand extends Command {
       category: "Modération - Sécurité du serveur",
       userPermissions: ["BAN_MEMBERS"],
       clientPermissions: ["BAN_MEMBERS"],
+      args: [{ id: 'member', type: 'member'}, { id: 'reason', type: 'string', match: 'restContent'}]
     });
   }
 
-  async exec(message) {
-    let member;
-    let reason;
+  async exec(message, { member, reason }) {
     let logs_channel;
 
     let db = await this.client.guildDB.get(message.guild);
 
-    let embed = this.client.functions
+    if(member && reason) {
+      let embed = this.client.functions.embed('Modération - Sécurité du serveur')
+      .setDescription(`${member.user.tag} à été banni pour la raison suivante: ${reason}`)
+
+      let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
+      .setDescription('🔨 Un utilisateur a été banni')
+      .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
+      .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
+      .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
+
+      member.ban({ reason: reason, days: 0 });
+
+      if(db.logs_channel) {
+        logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
+    } else {
+        logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
+    }
+
+    if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+
+      return message.reply({ embeds: [embed] });
+    } else {
+      let embed = this.client.functions
       .embed("Modération - Sécurité du serveur")
-      .setAuthor(message.author.tag, message.author.displayAvatarURL())
-      .setDescription("```Quel membre voulez-vous bannir?```");
+      .setDescription("**Quel membre voulez-vous bannir ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!");
 
     message.reply({ embeds: [embed] });
 
@@ -57,9 +77,8 @@ class banCommand extends Command {
 
       let embed = this.client.functions
         .embed("Modération - Sécurité du serveur")
-        .setAuthor(member.user.tag, member.user.displayAvatarURL())
         .setDescription(
-          "Pour quelle raison voulez-vous bannir cet utilisateur?"
+          "**Pour quelle raison voulez-vous bannir cet utilisateur ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
         );
 
       message.channel.send({ embeds: [embed] });
@@ -89,7 +108,7 @@ class banCommand extends Command {
           );
 
         let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
-            .setDescription('🔨 `Un utilisateur a été banni!`')
+            .setDescription('🔨 Un utilisateur a été banni!')
             .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
             .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
             .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
@@ -104,6 +123,7 @@ class banCommand extends Command {
         return message.channel.send({ embeds: [embed] });
       });
     });
+    };
   };
 };
 

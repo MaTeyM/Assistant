@@ -12,20 +12,40 @@ class kickCommand extends Command {
       category: "Modération - Sécurité du serveur",
       userPermissions: ["KICK_MEMBERS"],
       clientPermissions: ["KICK_MEMBERS"],
+      args: [{ id: 'member', type: 'member'}, { id: 'reason', type: 'string', match: 'restContent'}]
     });
   }
 
   async exec(message) {
-    let member;
-    let reason;
     let logs_channel;
 
     let db = await this.client.guildDB.get(message.guild);
 
+    if(member && reason) {
+      let embed = this.client.functions.embed('Modération - Sécurité du serveur')
+      .setDescription(`${member.user.tag} à été éxclu pour la raison suivante: ${reason}`)
+
+      let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
+      .setDescription('🔨 Un utilisateur a été éxclu`')
+      .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
+      .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
+      .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
+
+      member.kick(reason)
+
+      if(db.logs_channel) {
+        logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
+    } else {
+        logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
+    }
+
+    if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+
+      return message.reply({ embeds: [embed] });
+    } else {
     let embed = this.client.functions
       .embed("Modération - Sécurité du serveur")
-      .setAuthor(message.author.tag, message.author.displayAvatarURL())
-      .setDescription("```Quel membre voulez-vous exclure?```");
+      .setDescription("**Quel membre voulez-vous exclure ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!");
 
     message.reply({ embeds: [embed] });
 
@@ -49,7 +69,7 @@ class kickCommand extends Command {
         message.guild.members.cache.find((u) => u.name == m.content) ||
         message.guild.members.cache.find((u) => u.username == m.content) ||
         message.guild.members.cache.find((u) => u.user.tag == m.content) ||
-        message.mentions.members.first();
+        m.mentions.members.first();
       if (!member)
         return message.channel.send(
           "*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*"
@@ -57,9 +77,8 @@ class kickCommand extends Command {
 
       let embed = this.client.functions
         .embed("Modération - Sécurité du serveur")
-        .setAuthor(member.user.tag, member.user.displayAvatarURL())
         .setDescription(
-          "Pour quelle raison voulez-vous éxclure cet utilisateur?"
+          "**Pour quelle raison voulez-vous éxclure cet utilisateur ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
         );
 
       message.channel.send({ embeds: [embed] });
@@ -89,7 +108,7 @@ class kickCommand extends Command {
           );
 
           let logs_embed = this.client.functions.embed('Logs - Sécurité du serveur')
-          .setDescription('🔨 `Un utilisateur a été éxclu!`')
+          .setDescription('🔨 Un utilisateur a été éxclu`')
           .addField('Tag:', `\`\`\`${member.user.tag}\`\`\``, true)
           .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
           .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
@@ -105,7 +124,8 @@ class kickCommand extends Command {
         return message.channel.send({ embeds: [embed] });
       });
     });
-  }
-}
+  };
+ };
+};
 
 module.exports = kickCommand;

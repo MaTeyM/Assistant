@@ -11,7 +11,7 @@ class PingCommand extends Command {
            },
            category: 'Bot - Commandes en lien avec le bot',
            userPermissions: ['SEND_MESSAGES'],
-           clientPermissions: ['SEND_MESSAGES']
+           clientPermissions: ['SEND_MESSAGES'],
         });
     }
 

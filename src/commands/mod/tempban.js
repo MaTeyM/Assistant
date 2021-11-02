@@ -5,7 +5,7 @@ class tempbanCommand extends Command {
     super("tempban", {
       aliases: ["tempban", 'tban'],
       description: {
-        content: "Bannir un membre du serveur pendant un temps voulu!",
+        content: "Bannir temporairement un membre du serveur!",
         usage: "tempban",
         examples: ["tempban"],
       },
@@ -26,7 +26,7 @@ class tempbanCommand extends Command {
     let embed = this.client.functions
       .embed("Modération - Sécurité du serveur")
       .setAuthor(message.author.tag, message.author.displayAvatarURL())
-      .setDescription("```Quel membre voulez-vous bannir?```");
+      .setDescription("**Quel membre voulez-vous bannir ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!");
 
     message.reply({ embeds: [embed] });
 
@@ -60,7 +60,7 @@ class tempbanCommand extends Command {
         .embed("Modération - Sécurité du serveur")
         .setAuthor(member.user.tag, member.user.displayAvatarURL())
         .setDescription(
-          "Pendant combien de jours voulez-vous bannir cet utilisateur?"
+          "**Pendant combien de jours voulez-vous bannir cet utilisateur ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
         );
 
       message.channel.send({ embeds: [embed] });
@@ -86,7 +86,7 @@ class tempbanCommand extends Command {
       .embed("Modération - Sécurité du serveur")
       .setAuthor(member.user.tag, member.user.displayAvatarURL())
       .setDescription(
-        "Pour quelle raison voulez-vous bannir cet utilisateur?"
+        "**Pour quelle raison voulez-vous bannir cet utilisateur ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
       );
 
     message.channel.send({ embeds: [embed] });

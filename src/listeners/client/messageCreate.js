@@ -17,8 +17,8 @@ class MessageListener extends Listener {
 
         if(!memberData) return Member.create({ id: message.author.id, guildID: message.guild.id });
 
-        if(message.content === '<@!896397049854046269>') message.reply({ embeds: [
-            this.client.functions.embed('kyo\'s assistant')
+        if(message.content === '<@!896397049854046269>') return message.reply({ embeds: [
+            this.client.functions.embed('miku :)')
                 .setDescription(`\`\`\`Salut ${message.author.tag} :)\n\nMon préfix est ${guild_db.prefix}\nSi tu souhaites avoir la liste des commandes, je te conseille de faire ${guild_db.prefix}help\`\`\``)
         ] });
 

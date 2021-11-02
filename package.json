@@ -4,15 +4,19 @@
   "description": "kyo's discord assistant",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bot": "node ./src/index.js"
   },
   "author": "kyo",
   "license": "MIT",
   "dependencies": {
+    "@discordjs/rest": "*",
     "common-tags": "^1.8.0",
     "date-and-time": "^2.0.1",
     "discord-akairo": "github:SkyBlockDev/discord-akairo",
+    "discord-api-types": "^0.23.1",
     "discord.js": "^13.2.0",
+    "math": "^0.0.3",
     "mongoose": "^6.0.12",
     "util": "^0.12.4"
   }

@@ -22,19 +22,23 @@ class HelpCommand extends Command {
         .embed("Bot - Commandes en lien avec le bot")
         .setDescription(
           `Retrouvez la liste des toutes mes commandes ci-dessous, si vous avez besoin d'aide, entrez: \`${await this.handler.prefix(message)}help [commamnde]\`.\nPour information, les \`[]\` et \`<>\` ne sont pas à entrer dans les commandes!`
-        );
+        )
 
       for (const category of this.handler.categories.values()) {
         if (category.id != "dev") {
           embed.addField(
             `**${category.id}**`,
-            `${category
+            `\`\`\`\n${category
               .filter((cmd) => cmd.aliases.length > 0)
-              .map((cmd) => `\`${cmd.aliases[0]}: ${cmd.description.content}\``)
-              .join("\n")}`
+              .map((cmd) => `${cmd.aliases[0]}: ${cmd.description.content}`)
+              .join("\n")}\n\`\`\``
           );
         }
       }
+
+      embed.addFields({ name: 'Twitter:', value: `[twitter](https://twitter.com/kyoocreatives)`, inline: true },
+      { name: 'Des Questions?:', value: `[support](https://discord.gg/D4mxChFjQu)`, inline: true },
+      { name: 'Portfolio:', value: `[behance](https://t.co/8gVcJDAQxT?amp=1)`, inline: true })
 
       message.reply({ embeds: [embed] });
     } else {
@@ -44,19 +48,19 @@ class HelpCommand extends Command {
         .addFields(
           {
             name: `Description:`,
-            value: `\`${command.description.content}\``,
+            value: `\`\`\`${command.description.content}\`\`\``,
             inline: true,
           },
           {
             name: "Usage:",
-            value: `\`${command.description.usage}\``,
+            value: `\`\`\`${command.description.usage}\`\`\``,
             inline: true,
           },
           {
             name: "Examples:",
-            value: `\`${await this.handler.prefix(message)}${command.description.examples.join(
-              `\` | ${await this.handler.prefix(message)}\``
-            )}\``,
+            value: `\`\`\`${await this.handler.prefix(message)}${command.description.examples.join(
+              `\`\`\`\n\`\`\`${await this.handler.prefix(message)}`
+            )}\`\`\``,
             inline: true,
           }
         );

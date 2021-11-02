@@ -47,6 +47,10 @@ const memberSchema = Schema({
         type: Number,
         default: 0
     },
+    level: {
+        type: Number,
+        default: 1
+    },
     cash: {
         type: Number,
         default: 500

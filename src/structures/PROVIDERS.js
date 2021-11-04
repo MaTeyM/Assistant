@@ -30,6 +30,12 @@ class MemberProvider {
         };
         return data.updateOne(settings);
     };
+
+    async getAllMembers(guild) {
+        const data = await Member.find({ guildID: guild.id });
+        if(data) return data;
+        else return;
+    }
 };
 
 module.exports = { GuildProvider, MemberProvider };

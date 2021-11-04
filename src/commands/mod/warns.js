@@ -22,7 +22,7 @@ class warnsCommand extends Command {
     let authorTag = message.author.tag;
 
     let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-        .setDescription("**Que voulez vous faire ?> **\n```\nsee -> afficher les warns d'un utilisateur\nadd -> avertir un utilisateur\nremove -> retirer un avertissement à un utilisateur\n```\nTapez `cancel` si vous souhaitez annuler la commande!")
+        .setDescription("**Que voulez vous faire ?> **\n```\nsee -> afficher les warns d'un utilisateur\nadd -> avertir un utilisateur\nremove -> retirer un avertissement à un utilisateur\n```\nTapez `cancel` pour annuler la commande!")
 
     message.reply({ embeds: [embed] }).then(firstMSG => {
         let filter = m => m.author.id === message.author.id;
@@ -38,7 +38,7 @@ class warnsCommand extends Command {
             m.delete();
             if(m.content == 'see') {
                 let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                .setDescription('**De quel utilisateur voulez-vous voir les avertissements?**\n\nTapez `cancel` si vous souhaitez annuler la commande!')
+                .setDescription('**De quel utilisateur voulez-vous voir les avertissements?**\n\nTapez `cancel` pour annuler la commande!')
 
                 message.reply({ embeds: [embed] }).then(secondMSG => {
                     let filter = m => m.author.id === message.author.id;
@@ -80,7 +80,7 @@ class warnsCommand extends Command {
                 });
             } else if(m.content == 'add') {
                 let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                .setDescription('**Quel membre voulez-vous avertir ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!')
+                .setDescription('**Quel membre voulez-vous avertir ?**\n\nTapez `cancel` pour annuler la commande!')
 
                 let warnID = Math.round(Math.random(1, 999));
 
@@ -158,7 +158,7 @@ class warnsCommand extends Command {
                 });
             } else if(m.content == 'remove') {
               let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-              .setDescription('**De quel utilisateur voulez-vous retirer un warn ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!')
+              .setDescription('**De quel utilisateur voulez-vous retirer un warn ?**\n\nTapez `cancel` pour annuler la commande!')
 
               message.reply({ embeds: [embed] }).then(secondMSG => {
                   let filter = m => m.author.id === message.author.id;

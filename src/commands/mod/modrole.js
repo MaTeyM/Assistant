@@ -56,7 +56,7 @@ class modRoleCommand extends Command {
             let member;
 
             let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-            .setDescription('**Que voulez-vous faire ?**\n```add -> ajouter un rôle à un utilisateur\nremove -> retirer un rôle à un utilisateur\nclear -> supprimer tout les rôles d\'un utilisateur```\nTapez `cancel` si vous souhaitez annuler la commande!')
+            .setDescription('**Que voulez-vous faire ?**\n```add -> ajouter un rôle à un utilisateur\nremove -> retirer un rôle à un utilisateur\nclear -> supprimer tout les rôles d\'un utilisateur```\nTapez `cancel` pour annuler la commande!')
 
             message.reply({ embeds: [embed] }).then(firstMSG => {
                 let filter = m => m.author.id === message.author.id;
@@ -68,7 +68,7 @@ class modRoleCommand extends Command {
 
                     if(m.content == 'add') {
                         let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                        .setDescription('**A quel membre voulez-vous ajouter un rôle ?**\n\nTapez `cancel` si vous souhaitez annuler la commande')
+                        .setDescription('**A quel membre voulez-vous ajouter un rôle ?**\n\nTapez `cancel` pour annuler la commande')
 
                         firstMSG.delete()
                         message.reply({ embeds: [embed] }).then(secondMSG => {
@@ -79,17 +79,11 @@ class modRoleCommand extends Command {
                                 m.delete();
                                 if(m.content == 'cancel') return message.channel.send('***```/!\\ Commande annulée /!\\```***')
 
-                                member =
-                                message.guild.members.cache.get(m.content) ||
-                                message.guild.members.cache.find((u) => u.user.id == m.content) ||
-                                message.guild.members.cache.find((u) => u.name == m.content) ||
-                                message.guild.members.cache.find((u) => u.username == m.content) ||
-                                message.guild.members.cache.find((u) => u.user.tag == m.content) ||
-                                m.mentions.members.first();
+                                let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
                                 if(!member) return message.channel.send("***```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```***");
 
                                 let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                                .setDescription('**Quel rôle voulez vous ajouter ce membre ?**\n\nTapez `cancel` si vous souhaitez annuler la commande')
+                                .setDescription('**Quel rôle voulez vous ajouter ce membre ?**\n\nTapez `cancel` pour annuler la commande')
 
                                 secondMSG.delete();
                                 message.reply({ embeds: [embed] }).then(thirdMSG => {
@@ -119,7 +113,7 @@ class modRoleCommand extends Command {
                         });
                     } else if(m.content == 'remove') {
                         let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                        .setDescription('**A quel membre voulez vous retirer un rôle ?**\n\nTapez `cancel` si vous souhaitez annuler la commande')
+                        .setDescription('**A quel membre voulez vous retirer un rôle ?**\n\nTapez `cancel` pour annuler la commande')
 
                         firstMSG.delete()
                         message.reply({ embeds: [embed] }).then(secondMSG => {
@@ -130,8 +124,7 @@ class modRoleCommand extends Command {
                                 m.delete();
                                 if(m.content == 'cancel') return message.channel.send('***```/!\\ Commande annulée /!\\```***') && secondMSG.delete();
 
-                                member = message.guild.members.cache.get(m.content) || message.guild.members.cache.find((u) => u.user.id == m.content) || message.guild.members.cache.find((u) => u.name == m.content) || message.guild.members.cache.find((u) => u.username == m.content) || message.guild.members.cache.find((u) => u.user.tag == m.content) || m.mentions.members.first();
-                                      if(!member) return message.channel.send("***```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```***");
+                                let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
 
                                 let memberRoles = []
 

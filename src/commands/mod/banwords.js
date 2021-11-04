@@ -22,7 +22,7 @@ class banwordsCommand extends Command {
     let embed = this.client.functions
       .embed("Modération - Sécurité du serveur")
       .setDescription(
-        "**Que voulez vous faire ?**\n```\nsee -> afficher les mots bannis\nadd -> ajouter un mot dans la liste des mots bannis\nremove -> retirer un mot dans la liste des mots bannis\n```\nTapez `cancel` si vous souhaitez annuler la commande!"
+        "**Que voulez vous faire ?**\n```\nsee -> afficher les mots bannis\nadd -> ajouter un mot dans la liste des mots bannis\nremove -> retirer un mot dans la liste des mots bannis\n```\nTapez `cancel` pour annuler la commande!"
       );
 
     message.reply({ embeds: [embed] }).then((firstMsg) => {
@@ -55,7 +55,7 @@ class banwordsCommand extends Command {
           let embed = this.client.functions
             .embed("Modération - Sécurité du serveur")
             .setDescription(
-              "**Quel mot voulez vous ajouter ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
+              "**Quel mot voulez vous ajouter ?**\n\nTapez `cancel` pour annuler la commande!"
             );
 
           message.reply({ embeds: [embed] }).then((secondMsg) => {
@@ -93,7 +93,7 @@ class banwordsCommand extends Command {
           let embed = this.client.functions
           .embed("Modération - Sécurité du serveur")
           .setDescription(
-            "**Quel mot voulez vous retirer ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
+            "**Quel mot voulez vous retirer ?**\n\nTapez `cancel` pour annuler la commande!"
           );
 
         message.reply({ embeds: [embed] }).then((secondMsg) => {

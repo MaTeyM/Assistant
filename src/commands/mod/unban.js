@@ -42,7 +42,7 @@ class unbanCommand extends Command {
             return message.reply({ embeds: [embed] });
         } else {
             let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-            .setDescription('**Quel membre voulez-vous débannir ? (Ne fonctionne uniquement avec son ID)**\n\nTapez `cancel` si vous souhaitez annuler la commande!')
+            .setDescription('**Quel membre voulez-vous débannir ? (Ne fonctionne uniquement avec son ID)**\n\nTapez `cancel` pour annuler la commande!')
 
             message.reply({ embeds: [embed] }).then(firstMSG => {
                 let filter = m => m.author.id === message.author.id;

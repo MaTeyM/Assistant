@@ -34,6 +34,14 @@ const guildSchema = Schema({
         type: Boolean,
         default: false
     },
+    xp_system: {
+        type: Boolean,
+        default: false
+    },
+    economy_system: {
+        type: Boolean,
+        default: false
+    },
     ban_words: {
         type: Array,
         default: ['ntm', 'fdp', 'enculé']
@@ -49,7 +57,7 @@ const memberSchema = Schema({
     },
     level: {
         type: Number,
-        default: 1
+        default: 0
     },
     cash: {
         type: Number,

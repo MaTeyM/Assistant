@@ -26,7 +26,7 @@ class tempbanCommand extends Command {
     let embed = this.client.functions
       .embed("Modération - Sécurité du serveur")
       .setAuthor(message.author.tag, message.author.displayAvatarURL())
-      .setDescription("**Quel membre voulez-vous bannir ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!");
+      .setDescription("**Quel membre voulez-vous bannir ?**\n\nTapez `cancel` pour annuler la commande!");
 
     message.reply({ embeds: [embed] });
 
@@ -44,13 +44,7 @@ class tempbanCommand extends Command {
           message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
         );
       m.delete();
-      member =
-        message.guild.members.cache.get(m.content) ||
-        message.guild.members.cache.find((u) => u.user.id == m.content) ||
-        message.guild.members.cache.find((u) => u.name == m.content) ||
-        message.guild.members.cache.find((u) => u.username == m.content) ||
-        message.guild.members.cache.find((u) => u.user.tag == m.content) ||
-        message.mentions.members.first();
+      let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
       if (!member)
         return message.channel.send(
           "*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*"
@@ -60,7 +54,7 @@ class tempbanCommand extends Command {
         .embed("Modération - Sécurité du serveur")
         .setAuthor(member.user.tag, member.user.displayAvatarURL())
         .setDescription(
-          "**Pendant combien de jours voulez-vous bannir cet utilisateur ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
+          "**Pendant combien de jours voulez-vous bannir cet utilisateur ?**\n\nTapez `cancel` pour annuler la commande!"
         );
 
       message.channel.send({ embeds: [embed] });
@@ -86,7 +80,7 @@ class tempbanCommand extends Command {
       .embed("Modération - Sécurité du serveur")
       .setAuthor(member.user.tag, member.user.displayAvatarURL())
       .setDescription(
-        "**Pour quelle raison voulez-vous bannir cet utilisateur ?**\n\nTapez `cancel` si vous souhaitez annuler la commande!"
+        "**Pour quelle raison voulez-vous bannir cet utilisateur ?**\n\nTapez `cancel` pour annuler la commande!"
       );
 
     message.channel.send({ embeds: [embed] });

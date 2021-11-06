@@ -2,49 +2,30 @@ const { Schema, model } = require('mongoose');
 
 const guildSchema = Schema({
     id: String,
-    prefix: {
-        type: String,
-        default: '>'
-    },
-    logs_channel: {
-        type: String,
-        default: 'kyo-logs'
-    },
-    modlogs_channel: {
-        type: String,
-        default: 'kyo-logs'
-    },
-    welcome_channel: {
-        type: String,
-        default: 'welcome'
-    },
-    welcome_message: {
-        type: String,
-        default: 'Bienvenu'
-    },
-    delete_command: {
-        type: Boolean,
-        default: false
-    },
-    mod_logs: {
-        type: Boolean,
-        default: false
-    },
-    event_logs: {
-        type: Boolean,
-        default: false
+    prefix: { type: String, default: '>' },
+    logs: {
+        eventlogs_channel: { type: String, default: 'miku-logs' },
+        eventlogs_status: { type: String, default: 'off' },
+        modlogs_channel: { type: String, default: 'miku-logs' },
+        modlogs_status: { type: String, default: 'off' },
     },
     xp_system: {
-        type: Boolean,
-        default: false
+        status: { type: String, default: 'off' },
+        xp_per_message: { type: Number, default: 2 }
     },
     economy_system: {
-        type: Boolean,
-        default: false
+        status: { type: String, default: 'off' }
     },
-    ban_words: {
-        type: Array,
-        default: ['ntm', 'fdp', 'enculé']
+    mod: {
+        automod: {
+            status: { type: String, default: 'off' },
+            ban_words: []
+        }
+    },
+    others: {
+        delete_command: { type: String, default: 'off' },
+        welcome_channel: { type: String, default: 'welcome' },
+        welcome_message: { type: String, default: 'Bienvenu' }
     }
 });
 
@@ -52,28 +33,22 @@ const memberSchema = Schema({
     id: String,
     guildID: String,
     xp: {
-        type: Number,
-        default: 0
+        xp: { type: Number, default: 0 },
+        level: { type: Number, default: 1 }
     },
-    level: {
-        type: Number,
-        default: 0
+    economy: {
+        cash: { type: Number, default: 0 },
+        bank: { type: Number, default: 500 }
     },
-    cash: {
-        type: Number,
-        default: 500
+    mod: {
+        warns: [],
+        muted: { type: String, default: 'no' }
     },
-    afk: {
-        type: Boolean,
-        default: false
-    },
-    afk_reason: {
-        type: String,
-        default: null
-    },
-    warns: {
-        type: Array,
-        default: null
+    info: {
+        afk: {
+            status: { type: String, default: 'off' },
+            reason: { type: String, default: null}
+        }
     }
 });
 

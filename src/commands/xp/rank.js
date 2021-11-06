@@ -14,13 +14,13 @@ class rankCommand extends Command {
 
     async exec(message, { member }) {
         let db = await this.client.guildDB.get(message.guild);
-        if(db.xp_system === false) return message.reply('```/!\\ Le système d\'éxpérience n\'est pas activé sur ce serveur /!\\```')
+        if(db.xp_system.status === 'off') return message.reply('```/!\\ Le système d\'éxpérience n\'est pas activé sur ce serveur /!\\```')
         if(!member) member = message.guild.members.cache.get(message.author.id);
 
         let memberData = await this.client.memberDB.get(member, message.guild);
 
-        let xp = memberData.xp;
-        let level = memberData.level;
+        let xp = memberData.xp.xp;
+        let level = memberData.xp.level;
         let xpNeeded = (level * level * 100) - xp;
 
         let embed = this.client.functions.embed('Éxpérience - Système d\'xp pour le serveur')

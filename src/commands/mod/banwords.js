@@ -10,14 +10,16 @@ class banwordsCommand extends Command {
         examples: ["banwords"],
       },
       category: "Modération - Sécurité du serveur",
-      userPermissions: ["MANAGE_MESSAGES"],
-      clientPermissions: ["MANAGE_MESSAGES"],
+      userPermissions: ["MANAGE_GUILD"],
+      clientPermissions: ["MANAGE_GUILD"],
     });
   }
 
   async exec(message) {
     const db = await this.client.guildDB.get(message.guild);
-    const ban_words = db.ban_words;
+    let banwords = db.mod.automod.status
+    if(db.mod.automod.status === 'off') return message.reply('```/!\\ Le système de modération automatique n\'est pas activé sur ce serveur /!\\```')
+    const ban_words = db.mod.automod.ban_words;
 
     let embed = this.client.functions
       .embed("Modération - Sécurité du serveur")
@@ -78,7 +80,7 @@ class banwordsCommand extends Command {
                 );
               ban_words.push(word);
               await this.client.guildDB.update(message.guild, {
-                ban_words: ban_words,
+                'mod.automod.ban_words': ban_words,
               });
               let embed = this.client.functions
                 .embed("Modération - Sécurité du serveur")
@@ -117,7 +119,7 @@ class banwordsCommand extends Command {
             ban_words.splice(pos,1);
             let newbw = ban_words;
             await this.client.guildDB.update(message.guild, {
-              ban_words: newbw,
+              'mod.automod.ban_words': newbw,
             });
             let embed = this.client.functions
               .embed("Modération - Sécurité du serveur")

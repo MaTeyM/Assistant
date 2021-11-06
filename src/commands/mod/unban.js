@@ -31,13 +31,13 @@ class unbanCommand extends Command {
 
             message.guild.bans.remove(userID);
 
-            if(db.logs_channel) {
+            if(db.logs.modlogs_channel) {
                 logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
             } else {
                 logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
             }
         
-            if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+            if(logs_channel && db.logs.modlogs_status === 'on') logs_channel.send({ embeds: [logs_embed] });
 
             return message.reply({ embeds: [embed] });
         } else {
@@ -68,13 +68,13 @@ class unbanCommand extends Command {
                     .addField('ID', `\`\`\`${bannedUser.user.id}\`\`\``, true)
                     .addField('Moderator', `\`\`\`${message.author.tag}\`\`\``, true)
 
-                    if(db.logs_channel) {
+                    if(db.logs.modlogs_channel) {
                         logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
                     } else {
                         logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
                     }
                 
-                    if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+                    if(logs_channel && db.logs.modlogs_status === 'on') logs_channel.send({ embeds: [logs_embed] });
 
                     return message.reply({ embeds: [embed ]});
                 });

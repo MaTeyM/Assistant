@@ -52,24 +52,18 @@ class warnsCommand extends Command {
                           message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
                         );
                         m.delete();
-                        member =
-                        message.guild.members.cache.get(m.content) ||
-                        message.guild.members.cache.find((u) => u.user.id == m.content) ||
-                        message.guild.members.cache.find((u) => u.user.name == m.content) ||
-                        message.guild.members.cache.find((u) => u.username == m.content) ||
-                        message.guild.members.cache.find((u) => u.user.tag == m.content) ||
-                        message.mentions.members.first();
+                        let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
                       if (!member)
-                        return message.channel.send(
+                        return message.reply(
                           "*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*"
                         );
 
                         let memberData = await this.client.memberDB.get(member, message.guild);
 
                         let embed = this.client.functions.embed('Modération - Sécurité du serveur')
-                        .setDescription(memberData.warns.length > 0 ? `\`Voici les avertissement de ${member.user.tag}:\`` : `\`${member.user.tag} ne possède aucun avertissement\``)
+                        .setDescription(memberData.mod.warns.length > 0 ? `\`Voici les avertissement de ${member.user.tag}:\`` : `\`${member.user.tag} ne possède aucun avertissement\``)
 
-                        memberData.warns.forEach(warn => {
+                        memberData.mod.warns.forEach(warn => {
                             embed.addField('ID:', `\`\`\`${warn.id}\`\`\``, true)
                             embed.addField('Raison:', `\`\`\`${warn.reason}\`\`\``, true)
                             embed.addField('Date', `\`\`\`${warn.date}\`\`\``, true)
@@ -96,14 +90,8 @@ class warnsCommand extends Command {
                           message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
                         );
                         m.delete();
-                        member =
-                        message.guild.members.cache.get(m.content) ||
-                        message.guild.members.cache.find((u) => u.user.id == m.content) ||
-                        message.guild.members.cache.find((u) => u.user.name == m.content) ||
-                        message.guild.members.cache.find((u) => u.username == m.content) ||
-                        message.guild.members.cache.find((u) => u.user.tag == m.content) ||
-                        message.mentions.members.first();
-                        if (!member) return message.channel.send("*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*");
+                        let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
+                        if (!member) return message.reply("*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*");
 
                         let embed = this.client.functions.embed('Modération - Sécurité du serveur')
                         .setDescription(`**Pour quelle raison voulez vous avertir ${member.user.tag} ?**\n\nTapez \`cancel\` si vous souhaitez annuler la commande!`)
@@ -133,24 +121,24 @@ class warnsCommand extends Command {
                                 };
                                 let db = await this.client.memberDB.get(member, message.guild);
                                 let guildDB = await this.client.guildDB.get(message.guild);
-                                let warns = db.warns;
+                                let warns = db.mod.warns;
                                 warns.push(newWarn)
                                 let newWarns = warns;
 
-                               await this.client.memberDB.update(member, message.guild, { warns: newWarns });
+                               await this.client.memberDB.update(member, message.guild, { 'mod.warns': newWarns });
 
                                 let embed = this.client.functions.embed('Modération - Sécurité du serveur')
                                 .setDescription(`\`\`\`${member.user.tag} a été averti pour la raison: ${reason}\`\`\``)
 
                                 let logs_embed = this.client.functions.embed('Logs - Sécurité de serveur')
                                 .setDescription(`⚠ Un utilisateur a été averti!`)
-                                .addField('ID:', `\`\`\`${memberData.warns = null ? '0' : memberData.warns.length}\`\`\``, true)
+                                .addField('ID:', `\`\`\`${memberData.mod.warns = null ? '0' : memberData.mod.warns.length}\`\`\``, true)
                                 .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
                                 .addField('Modérateur:', `\`\`\`${authorTag}\`\`\``, true)
 
-                                let salon_logs = message.guild.channels.cache.find( c => c.name == 'miku-logs') || message.guild.channels.cache.get(guildDB.modlogs_channel);
+                                let salon_logs = message.guild.channels.cache.find( c => c.name == 'miku-logs') || message.guild.channels.cache.get(guildDB.logs.modlogs_channel);
 
-                                if(salon_logs) salon_logs.send({ embeds: [logs_embed] });
+                                if(salon_logs && guildDB.logs.modlogs_status === 'on') salon_logs.send({ embeds: [logs_embed] });
                                 return message.reply({ embeds: [embed] });
                             });
                         });
@@ -172,13 +160,7 @@ class warnsCommand extends Command {
                         message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
                       );
                       m.delete();
-                      member =
-                      message.guild.members.cache.get(m.content) ||
-                      message.guild.members.cache.find((u) => u.user.id == m.content) ||
-                      message.guild.members.cache.find((u) => u.user.name == m.content) ||
-                      message.guild.members.cache.find((u) => u.username == m.content) ||
-                      message.guild.members.cache.find((u) => u.user.tag == m.content) ||
-                      message.mentions.members.first();
+                      let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
                       if (!member) return message.channel.send("*```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```*");
 
                       let embed = this.client.functions.embed('Modération - Sécurité du serveur')
@@ -198,13 +180,12 @@ class warnsCommand extends Command {
                               m.delete();
                               let warnID = m.content;
                               let memberData = await this.client.memberDB.get(member, message.guild);
-                              
-                              let db = await this.client.memberDB.get(member, message.guild);
-                              let warns = db.warns;
+                              let warns = memberData.mod.warns;
 
-                            warns.splice(warnID,1);
+                            let indexof = warns.indexOf(warn => warn.id === warnID)
+                            warns.splice(indexof-1,1);
                             let newWarns = warns;
-                            await this.client.memberDB.update(member, message.guild, { warns: newWarns });
+                            await this.client.memberDB.update(member, message.guild, { 'mod.warns': newWarns });
 
                               let embed = this.client.functions.embed('Modération - Sécurité du serveur')
                               .setDescription(`\`\`\`Le warn ${warnID} de ${member.user.tag} a été supprimé!\`\`\``)

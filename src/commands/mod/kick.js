@@ -33,13 +33,13 @@ class kickCommand extends Command {
 
       member.kick(reason)
 
-      if(db.logs_channel) {
+      if(db.logs.modlogs_channel) {
         logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
     } else {
         logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
     }
 
-    if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+    if(logs_channel && db.logs.modlogs_status === 'on') logs_channel.send({ embeds: [logs_embed] });
 
       return message.reply({ embeds: [embed] });
     } else {
@@ -107,13 +107,13 @@ class kickCommand extends Command {
           .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
           .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
 
-      if(db.logs_channel) {
+      if(db.logs.modlogs_channel) {
           logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
       } else {
           logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
       }
 
-      if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+      if(logs_channel && db.logs.modlogs_status === 'on') logs_channel.send({ embeds: [logs_embed] });
 
         return message.channel.send({ embeds: [embed] });
       });

@@ -23,42 +23,58 @@ class MessageListener extends Listener {
                 .setDescription(`\`\`\`Salut ${message.author.tag} :)\n\nMon préfix est ${guildData.prefix}\nSi tu souhaites avoir la liste des commandes, je te conseille de faire ${guildData.prefix}help\`\`\``)
         ] });
 
-        let ban_words = guildData.ban_words;
+        let ban_words = guildData.mod.automod.ban_words;
         let content = message.content.split(' ');
         let content_values = content.values();
 
+        if(memberData.mod.muted === 'yes') return message.delete();
+
         if(!message.member.permissions.has('MANAGE_MESSAGES')) {
-            for(const word of content_values) {
-                if(ban_words.includes(word)) {
-                    message.delete()
-                    message.channel.send({ embeds: [
-                        this.client.functions.embed('Modération Automatique - Sécurité du serveur')
-                            .setAuthor(message.author.tag, message.author.displayAvatarURL())
-                            .setDescription('Tu as cité un mot banni, ton message a donc été supprimé!')
-                    ]});
+            if(guildData.mod.automod.status === 'on') {
+                for(const word of content_values) {
+                    if(ban_words.includes(word)) {
+                        message.delete()
+                        message.channel.send({ embeds: [
+                            this.client.functions.embed('Modération Automatique - Sécurité du serveur')
+                                .setAuthor(message.author.tag, message.author.displayAvatarURL())
+                                .setDescription('Tu as cité un mot banni, ton message a donc été supprimé!')
+                        ]});
+                    };
                 };
             };
         };
 
-        if(guildData.xp_system === true) {
+        if(guildData.xp_system.status === 'on') {
             const xpCD = Math.floor(Math.random() * 19) + 1;
-            const xpToAdd = Math.floor(Math.random() * 25) + 10;
+            let xpToAdd;
+
+            if(guildData.xp_system.xp_per_message === 1) xpToAdd = Math.floor(Math.random() * 5);
+            if(guildData.xp_system.xp_per_message === 2) xpToAdd = Math.floor(Math.random() * 15) + 10;
+            if(guildData.xp_system.xp_per_message === 3) xpToAdd = Math.floor(Math.random() * 25) + 25;
+            if(guildData.xp_system.xp_per_message === 4) xpToAdd = Math.floor(Math.random() * 25) + 40;
         
-            const UpdatedXP = memberData.xp + xpToAdd;
-            const neededXP = memberData.level * memberData.level * 100;
+            const UpdatedXP = memberData.xp.xp + xpToAdd;
+            const neededXP = memberData.xp.level * memberData.xp.level * 100;
     
-            let level = memberData.level;
-            let xp = memberData.xp
+            let level = memberData.xp.level;
+            let xp = memberData.xp.xp;
     
             if (xpCD >= 7 && xpCD <= 12) {
-                await this.client.memberDB.update(message.member, message.guild, { xp: UpdatedXP });
+                await this.client.memberDB.update(message.member, message.guild, { 'xp.xp': UpdatedXP });
               };
     
             if (xp >= neededXP) {
                 ++level
                 xp-=neededXP
     
-                await this.client.memberDB.update(message.member, message.guild, { xp: xp, level: level })
+                await this.client.memberDB.update(message.member, message.guild, { 'xp.xp': xp, 'xp.level': level })
+            };
+            if (xp < 0) {
+                level = level - 1
+                xp = xp/(-1)
+                xp = level * level * 100 - xp
+
+                await this.client.memberDB.update(message.member, message.guild, { 'xp.xp': xp, 'xp.level': level })
             };
         };
     };

@@ -6,30 +6,30 @@ class modXPCommand extends Command {
             aliases: ['modxp', 'adminxp', 'adminlevel', 'modlevel'],
             category: 'Éxpérience - Système d\'xp pour le serveur',
             description: { content: 'Gérer l\'xp d\'un utilisateur', usage: 'modxp <option> <utilisateur> <xp>', examples: ['modxp', 'modxp add Kyoo 100'] },
-            userPermissions: 'MANAGE_ROLES',
-            clientPermissions: 'MANAGE_ROLES',
+            userPermissions: 'MANAGE_GUILD',
+            clientPermissions: 'MANAGE_GUILD',
             args: [ { id: 'option', type: 'string' }, { id: 'member', type: 'member' }, { id: 'xpToAdd', type: 'number'} ]
         });
     };
 
     async exec(message, { member, option, xpToAdd }) {
         let db = await this.client.guildDB.get(message.guild);
-        if(db.xp_system === false) return message.reply('```/!\\ Le système d\'éxpérience n\'est pas activé sur ce serveur /!\\```')
+        if(db.xp_system.status === 'off') return message.reply('```/!\\ Le système d\'éxpérience n\'est pas activé sur ce serveur /!\\```')
         if(member && option && xpToAdd) {
             const memberData = await this.client.memberDB.get(member, message.guild);
-            const memberXP = memberData.xp;
+            const memberXP = memberData.xp.xp;
 
             if(option == 'add') {
                 let embed = this.client.functions.embed('Éxpérience - Système d\'xp pour le serveur')
                 .setDescription(`${xpToAdd}xp ont été ajoutés à ${member}`)
 
-                await this.client.memberDB.update(member, message.guild, { xp: memberXP+xpToAdd });
+                await this.client.memberDB.update(member, message.guild, { 'xp.xp': memberXP+xpToAdd });
                 return message.reply({ embeds: [embed] });
             } else if(option == 'remove') {
                 let embed = this.client.functions.embed('Éxpérience - Système d\'xp pour le serveur')
                 .setDescription(`${xpToAdd}xp ont été retirés à ${member}`)
 
-                await this.client.memberDB.update(member, message.guild, { xp: memberXP-xpToAdd });
+                await this.client.memberDB.update(member, message.guild, { 'xp.xp': memberXP-xpToAdd });
                 return message.reply({ embeds: [embed] });
             };
         } else {
@@ -58,6 +58,7 @@ class modXPCommand extends Command {
                                 let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
                                 if(!member) return message.reply('```/!\\ Membre Invalide /!\\```')
                                 let memberData = await this.client.memberDB.get(member, message.guild);
+                                let memberXP = memberData.xp.xp;
 
                                 let embed = this.client.functions.embed('Éxpérience - Système d\'xp pour le serveur')
                                 .setDescription(`**Combien d'xp voulez-vous ajouter à ${member}**\n\nTapez \`cancel\` pour annuler la commande`)
@@ -77,7 +78,7 @@ class modXPCommand extends Command {
                                         let embed = this.client.functions.embed('Éxpérience - Système d\'xp pour le serveur')
                                         .setDescription(`${member} a reçu ${xp} points d'expérience!`)
 
-                                        await this.client.memberDB.update(member, message.guild, { xp: memberData.xp+xp });
+                                        await this.client.memberDB.update(member, message.guild, { 'xp.xp': memberData.xp+xp });
 
                                         return message.reply({ embeds: [embed] });
                                     });
@@ -99,6 +100,7 @@ class modXPCommand extends Command {
                                 let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
                                 if(!member) return message.reply('```/!\\ Membre Invalide /!\\```')
                                 let memberData = await this.client.memberDB.get(member, message.guild);
+                                let memberXP = memberData.xp.xp;
 
                                 let embed = this.client.functions.embed('Éxpérience - Système d\'xp pour le serveur')
                                 .setDescription(`**Combien d'xp voulez-vous retirer à ${member}**\n\nTapez \`cancel\` pour annuler la commande`)
@@ -118,7 +120,7 @@ class modXPCommand extends Command {
                                         let embed = this.client.functions.embed('Éxpérience - Système d\'xp pour le serveur')
                                         .setDescription(`${member} a perdu ${xp} points d'expérience!`)
 
-                                        await this.client.memberDB.update(member, message.guild, { xp: memberData.xp-xp });
+                                        await this.client.memberDB.update(member, message.guild, { 'xp.xp': memberData.xp-xp });
 
                                         return message.reply({ embeds: [embed] });
                                     });

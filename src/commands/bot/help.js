@@ -24,17 +24,29 @@ class HelpCommand extends Command {
           `Retrouvez la liste des toutes mes commandes ci-dessous, si vous avez besoin d'aide, entrez: \`${await this.handler.prefix(message)}help [commamnde]\`.\nPour information, les \`[]\` et \`<>\` ne sont pas à entrer dans les commandes!`
         )
 
+      // for (const category of this.handler.categories.values()) {
+      //   if (category.id != "dev") {
+      //     embed.addField(
+      //       `**${category.id}**`,
+      //       `\`\`\`\n${category
+      //         .filter((cmd) => cmd.aliases.length > 0)
+      //         .map((cmd) => `${cmd.aliases[0]}: ${cmd.description.content}`)
+      //         .join("\n")}\n\`\`\``
+      //     );
+      //   };
+      // };
+
       for (const category of this.handler.categories.values()) {
         if (category.id != "dev") {
           embed.addField(
             `**${category.id}**`,
-            `\`\`\`\n${category
+            `${category
               .filter((cmd) => cmd.aliases.length > 0)
-              .map((cmd) => `${cmd.aliases[0]}: ${cmd.description.content}`)
-              .join("\n")}\n\`\`\``
+              .map((cmd) => `\`${cmd.aliases[0]}:\` ${cmd.description.content}`)
+              .join("\n")}`
           );
-        }
-      }
+        };
+      };
 
       embed.addFields({ name: 'Twitter:', value: `[twitter](https://twitter.com/kyoocreatives)`, inline: true },
       { name: 'Des Questions?:', value: `[support](https://discord.gg/D4mxChFjQu)`, inline: true },
@@ -44,7 +56,6 @@ class HelpCommand extends Command {
     } else {
       let embed = this.client.functions
         .embed("Bot - Commandes en lien avec le bot")
-        .setDescription(`Commande **${command.aliases[0]}**`)
         .addFields(
           {
             name: `Description:`,

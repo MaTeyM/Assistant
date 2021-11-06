@@ -79,7 +79,7 @@ class modRoleCommand extends Command {
                                 m.delete();
                                 if(m.content == 'cancel') return message.channel.send('***```/!\\ Commande annulée /!\\```***')
 
-                                let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content)
+                                let member = message.guild.members.cache.get(m.content) || m.mentions.members.first() || message.guild.members.cache.find(user => user.username == m.content) || message.guild.members.cache.find(user => user.displayName == m.content) || message.guild.members.cache.find(user => user.user.tag == m.content);
                                 if(!member) return message.channel.send("***```Le membre est invalide! \n\n/!\\ Veuillez refaire la commande! /!\\```***");
 
                                 let embed = this.client.functions.embed('Modération - Sécurité du serveur')

@@ -33,13 +33,13 @@ class banCommand extends Command {
 
       member.ban({ reason: reason, days: 0 });
 
-      if(db.logs_channel) {
+      if(db.logs.modlogs_channel) {
         logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
     } else {
         logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
     }
 
-    if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+    if(logs_channel && db.logs.modlogs_status === 'on') logs_channel.send({ embeds: [logs_embed] });
 
       return message.reply({ embeds: [embed] });
     } else {
@@ -57,7 +57,7 @@ class banCommand extends Command {
     });
 
     collector.on("collect", (m) => {
-      if (m.content === "cancel")
+      if (m.content == "cancel")
         return (
           m.delete() &&
           message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
@@ -85,7 +85,7 @@ class banCommand extends Command {
       });
 
       collector.on("collect", (m) => {
-        if (m.content === "cancel")
+        if (m.content == "cancel")
           return (
             m.delete() &&
             message.channel.send(`*\`\`\`/!\\ Commande annulée /!\\\`\`\`*`)
@@ -107,13 +107,13 @@ class banCommand extends Command {
             .addField('ID:', `\`\`\`${member.user.id}\`\`\``, true)
             .addField('Raison:', `\`\`\`${reason}\`\`\``, true)
 
-        if(db.logs_channel) {
+        if(db.logs.modlogs_channel) {
             logs_channel = message.guild.channels.cache.get(db.logs_channel) || message.guild.channels.cache.find(c => c.name == db.logs_channel) || message.guild.channels.cache.find(c => c.id == db.logs_channel)
         } else {
             logs_channel = message.guild.channels.cache.find(c => c.name == 'miku-logs');
         }
 
-        if(logs_channel) logs_channel.send({ embeds: [logs_embed] });
+        if(logs_channel && db.logs.modlogs_status === 'on') logs_channel.send({ embeds: [logs_embed] });
         return message.channel.send({ embeds: [embed] });
       });
     });

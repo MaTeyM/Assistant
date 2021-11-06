@@ -33,9 +33,9 @@ class clearCommand extends Command {
       .addField('Tag:', `\`\`\`${message.author.tag}\`\`\``, true)
       .addField('ID:', `\`\`\`${message.author.id}\`\`\``, true)
 
-      let modlogs_salon = message.guild.channels.cache.get(db.modlogs_channel) || message.guild.channels.cache.find(c => c.id == db.modlogs_channel)
+      let modlogs_salon = message.guild.channels.cache.get(db.logs.modlogs_channel) || message.guild.channels.cache.find(c => c.id == db.logs.modlogs_channel)
 
-  if(modlogs_salon) modlogs_salon.send({ embeds: [logs_embed] });
+  if(modlogs_salon && db.logs.modlogs_status === 'on') modlogs_salon.send({ embeds: [logs_embed] });
 
     return message.channel.send({ embeds: [embed] });
     } else {
@@ -75,9 +75,9 @@ class clearCommand extends Command {
           .addField('Tag:', `\`\`\`${message.author.tag}\`\`\``, true)
           .addField('ID:', `\`\`\`${message.author.id}\`\`\``, true)
 
-          let modlogs_salon = message.guild.channels.cache.get(db.modlogs_channel) || message.guild.channels.cache.find(c => c.id == db.modlogs_channel)
+          let modlogs_salon = message.guild.channels.cache.get(db.logs.modlogs_channel) || message.guild.channels.cache.find(c => c.id == db.logs.modlogs_channel)
 
-      if(modlogs_salon) modlogs_salon.send({ embeds: [logs_embed] });
+      if(modlogs_salon && db.logs.modlogs_status === 'on') modlogs_salon.send({ embeds: [logs_embed] });
 
         return message.channel.send({ embeds: [embed] });
       });
